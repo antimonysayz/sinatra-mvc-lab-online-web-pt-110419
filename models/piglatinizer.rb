@@ -9,24 +9,21 @@ class PigLatinizer
   end
 
   def piglatinize(word)
-    word.gsub(/\w+/) { |word| translate(word)  }
+  pigarray = word.split
+
+  new = pigarray.collect do |a_word|
+    first_vowel_i = a_word.split('').find_index do |char|
+      ['a','e','i','o','u'].include?(char.downcase)
+    end
+
+    if first_vowel_i == 0
+      a_word << "way"
+    else
+      a_word[first_vowel_i...a_word.length] <<"#{a_word[0...first_vowel_i]}ay"
+    end
   end
 
-  def translate(word)
-    return word + "way" if @vowels.include?(word[0].downcase)
-    handle_capitals(word)
-  end
+  new.join(" ")
+end
 
-  def capital?(word)
-    word[0] != word[0].downcase
-  end
-
-  def latinize_word(word)
-    word[1..-1] + word[0] + "ay"
-  end
-
-  def handle_capitals(word)
-    return latinize_word(word).capitalize if capital?(word)
-    latinize_word(word)
-  end
 end
